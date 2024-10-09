@@ -40,7 +40,7 @@ public class Main {
 //        findPassengerByTicketNumber();
 //        findPassengerByPassengerId();
 
-
+        System.out.println("Finished, Goodbye!");
     }
 
     /**
