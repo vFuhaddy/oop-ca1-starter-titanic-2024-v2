@@ -2,7 +2,11 @@ package org.example;
 // CA1
 import java.io. * ;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Collections;
+import static org.example.PassengerClass.SECOND;
 
 public class Main {
     public static void main(String[] args) {
@@ -19,28 +23,212 @@ public class Main {
         // Assignment: Implement and test the following methods.
         // See the description of each method in the CA1 Specification PDF file from Moodle
 
-//        getPassengerNames();
-//        getPassengersContainingNames();
-//        getPassengersOlderThan();
-//        countPassengersByGender();
-//        sumFares();
-//        maleSurvivors();
-//        ticketOwner();
-//        averageAge();
-//        getPassengersByTicketClass();
-//        sortPassengersByPassengerId()
-//        sortPassengersByName();
-//        sortPassengersByAgeThenName();
-//        sortPassengersByGenderThenPassengerNumber()
-//        sortPassengersByFareThenSurvival();
-//        sortPassengersByTicketClass()
-//        sortPassengersByAge();
-//        sortPassengersByTicketNumberLambda();
-//        sortPassengersByTicketNumberStatic();
-//        findPassengerByTicketNumber();
-//        findPassengerByPassengerId();
+        getPassengerNames(passengerList);
+        getPassengersContainingNames(passengerList, "Paul");
+        getPassengersOlderThan(passengerList, 25);
+        countPassengersByGender(passengerList,"male");
+        sumFares(passengerList);
+        maleSurvivors(passengerList);
+        ticketOwner(passengerList, "PC 17759");
+        averageAge(passengerList);
+        getPassengersByTicketClass(passengerList, SECOND);
+        sortPassengersByPassengerId(passengerList);
+        sortPassengersByName(passengerList);
+        sortPassengersByAgeThenName(passengerList);
+        sortPassengersByGenderThenPassengerNumber(passengerList);
+        sortPassengersByFareThenSurvival(passengerList);
+        sortPassengersByTicketClass(passengerList);
+        sortPassengersByAgeUsingInnerClass(passengerList);
+        sortPassengersByTicketNumberLambda(passengerList);
+        sortPassengersByTicketNumberStatic(passengerList);
+        findPassengerByTicketNumber(passengerList, "A/5 21171");
+        findPassengerByPassengerId(passengerList, "53");
 
         System.out.println("Finished, Goodbye!");
+    }
+
+    public static String[] getPassengerNames(ArrayList<Passenger> passengers) {
+        
+        String[] names = new String[passengers.size()];
+     
+        for (int i = 0; i < passengers.size(); i++) {
+            names[i] = passengers.get(i).getName();
+        }
+    
+        return names;
+    }
+
+    public static List<Passenger> getPassengersContainingNames(ArrayList<Passenger> passengers, String name) 
+    {
+        List<Passenger> containsName = new ArrayList<>();
+        
+        for (Passenger passenger : passengers) {
+            if (passenger.getName().toLowerCase().contains(name.toLowerCase())) {
+                containsName.add(passenger);
+            }
+        }
+        
+        return containsName;
+    }
+
+    public static List<Passenger> getPassengersOlderThan(ArrayList<Passenger> passengers, int age) {
+        List<Passenger> olderThan = new ArrayList<>();
+        
+        
+        for (Passenger passenger : passengers) {
+            if (passenger.getAge() > age) {
+                olderThan.add(passenger);
+            }
+        }
+        
+        return olderThan;
+    }
+
+    public static int countPassengersByGender(ArrayList<Passenger> passengers,String gender) {
+        int count = 0;
+        
+       
+        for (Passenger passenger : passengers) {
+            if (passenger.getGender().equalsIgnoreCase(gender)) {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+
+    public static double sumFares(ArrayList<Passenger> passengers) {
+        double totalFares = 0;
+        
+       
+        for (Passenger passenger : passengers) {
+            totalFares = totalFares + passenger.getFare();
+        }
+        
+        return totalFares;
+    }
+
+    public static String[] maleSurvivors(ArrayList<Passenger> passengers) {
+        List<String> maleSurvivorNames = new ArrayList<>();
+        
+        
+        for (Passenger passenger : passengers) {
+            if (passenger.getSurvived() == 1 && "male".equalsIgnoreCase(passenger.getGender())) {
+                maleSurvivorNames.add(passenger.getName()); 
+            }
+        }
+        
+        
+        String[] result = maleSurvivorNames.toArray(new String[0]);
+        return result;
+    }
+
+    public static Passenger ticketOwner(ArrayList<Passenger> passengers, String ticketNumber) {
+        
+        for (Passenger passenger : passengers) {
+            if (passenger.getTicketNumber().equals(ticketNumber)) {
+                return passenger; 
+            }
+        }
+        
+        return null;
+    }
+    
+    public static double averageAge(ArrayList<Passenger> passengers) {
+
+        int totalAge = 0;
+        for (Passenger passenger : passengers) {
+            totalAge = totalAge + passenger.getAge();
+        }
+        return (double) totalAge / passengers.size();
+    }
+
+    public static List<Passenger> getPassengersByTicketClass(ArrayList<Passenger> passengers,PassengerClass passengerClass) {
+        List<Passenger> classPassengers = new ArrayList<>();
+        for (Passenger passenger : passengers) {
+            if (passenger.getPassengerClass() == passengerClass) {
+                classPassengers.add(passenger);
+            }
+        }
+        return classPassengers;
+    }
+
+    public static List<Passenger> sortPassengersByPassengerId(ArrayList<Passenger> passengers) {
+        
+        List<Passenger> sortedPassengers = new ArrayList<>(passengers);
+        
+        
+        sortedPassengers.sort(Comparator.comparing(Passenger::getPassengerId));
+        
+        return sortedPassengers;
+    }
+
+    public static List<Passenger> sortPassengersByName(ArrayList<Passenger> passengers) {
+        
+        List<Passenger> sortedPassengers = new ArrayList<>(passengers);
+        
+        sortedPassengers.sort(Comparator.comparing(Passenger::getName));
+        
+        return sortedPassengers;
+    }
+
+    public static List<Passenger> sortPassengersByAgeThenName(ArrayList<Passenger> passengers) {
+        passengers.sort(Comparator.comparingInt(Passenger::getAge)
+            .thenComparing(Passenger::getName));
+        return passengers; 
+    }
+
+    public static List<Passenger> sortPassengersByGenderThenPassengerNumber(ArrayList<Passenger> passengers) {
+        passengers.sort(Comparator.comparing(Passenger::getGender)
+            .thenComparing(Passenger::getPassengerId));
+        return passengers; 
+    }
+
+    public static List<Passenger> sortPassengersByFareThenSurvival(ArrayList<Passenger> passengers) {
+        passengers.sort(Comparator.comparingDouble(Passenger::getFare)
+            .thenComparing(Passenger::getSurvived));
+        return passengers;
+    }
+
+    public static List<Passenger> sortPassengersByTicketClass(ArrayList<Passenger> passengers) {
+        passengers.sort(Comparator.comparing(Passenger::getPassengerClass));
+        return passengers;
+    }
+
+    public static List<Passenger> sortPassengersByAgeUsingInnerClass(ArrayList<Passenger> passengers) {
+        passengers.sort(new Comparator<Passenger>() {
+            @Override
+            public int compare(Passenger p1, Passenger p2) {
+                return Integer.compare(p1.getAge(), p2.getAge());
+            }
+        });
+        return passengers; 
+    }
+
+    public static List<Passenger> sortPassengersByTicketNumberLambda(ArrayList<Passenger> passengers) {
+        passengers.sort((p1, p2) -> p1.getTicketNumber().compareTo(p2.getTicketNumber()));
+        return passengers; 
+    }
+
+    public static List<Passenger> sortPassengersByTicketNumberStatic(ArrayList<Passenger> passengers) {
+        passengers.sort(Comparator.comparing(Passenger::getTicketNumber));
+        return passengers; 
+    }
+
+
+//Source for reference: https://www.geeksforgeeks.org/binary-search-in-java/
+    public static Passenger findPassengerByTicketNumber(ArrayList<Passenger> passengers, String ticketNumber) {
+        passengers.sort(Comparator.comparing(Passenger::getTicketNumber)); 
+        int index = java.util.Collections.binarySearch(passengers, new Passenger(ticketNumber), 
+            Comparator.comparing(Passenger::getTicketNumber));
+        return (index >= 0) ? passengers.get(index) : null;
+    }
+//Source for reference: https://www.geeksforgeeks.org/binary-search-in-java/
+    public static  Passenger findPassengerByPassengerId(ArrayList<Passenger> passengers, String passengerId) {
+        passengers.sort(Comparator.comparing(Passenger::getPassengerId)); 
+        int index = java.util.Collections.binarySearch(passengers, new Passenger(passengerId), 
+            Comparator.comparing(Passenger::getPassengerId));
+        return (index >= 0) ? passengers.get(index) : null; 
     }
 
     /**
